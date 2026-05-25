@@ -10,6 +10,8 @@ CADDY_DATA_VOLUME="${CADDY_DATA_VOLUME:-fred_macro_caddy_data}"
 CADDY_CONFIG_VOLUME="${CADDY_CONFIG_VOLUME:-fred_macro_caddy_config}"
 CADDYFILE_DIR="${CADDYFILE_DIR:-.public_deploy}"
 CADDYFILE_PATH="${CADDYFILE_DIR}/Caddyfile"
+PUBLIC_HTTP_PORT="${PUBLIC_HTTP_PORT:-80}"
+PUBLIC_HTTPS_PORT="${PUBLIC_HTTPS_PORT:-443}"
 
 if [[ -z "${PUBLIC_HOSTNAME}" ]]; then
   echo "Missing PUBLIC_HOSTNAME."
@@ -21,12 +23,18 @@ fi
 mkdir -p "${CADDYFILE_DIR}"
 
 {
+  echo "{"
   if [[ -n "${ACME_EMAIL}" ]]; then
-    echo "{"
     echo "    email ${ACME_EMAIL}"
-    echo "}"
-    echo
   fi
+  if [[ "${PUBLIC_HTTP_PORT}" != "80" ]]; then
+    echo "    http_port ${PUBLIC_HTTP_PORT}"
+  fi
+  if [[ "${PUBLIC_HTTPS_PORT}" != "443" ]]; then
+    echo "    https_port ${PUBLIC_HTTPS_PORT}"
+  fi
+  echo "}"
+  echo
   echo "${PUBLIC_HOSTNAME} {"
   echo "    encode gzip zstd"
   echo "    reverse_proxy fred_macro_metabase:3000"
@@ -47,8 +55,8 @@ docker run -d \
   --name "${CADDY_CONTAINER}" \
   --restart unless-stopped \
   --network "${NETWORK_NAME}" \
-  -p 80:80 \
-  -p 443:443 \
+  -p "${PUBLIC_HTTP_PORT}:${PUBLIC_HTTP_PORT}" \
+  -p "${PUBLIC_HTTPS_PORT}:${PUBLIC_HTTPS_PORT}" \
   -v "$(pwd)/${CADDYFILE_PATH}:/etc/caddy/Caddyfile:ro" \
   -v "${CADDY_DATA_VOLUME}:/data" \
   -v "${CADDY_CONFIG_VOLUME}:/config" \

@@ -89,6 +89,37 @@ Open:
 https://metabase.example.com
 ```
 
+## If Server Port 80 Is Already Used
+
+If Caddy fails with:
+
+```text
+failed to bind host port 0.0.0.0:80/tcp: address already in use
+```
+
+Either stop the service using port 80, or run Caddy on alternate internal ports:
+
+```bash
+sudo PUBLIC_HOSTNAME='metabase.example.com' \
+ACME_EMAIL='you@example.com' \
+PUBLIC_HTTP_PORT=8080 \
+PUBLIC_HTTPS_PORT=8443 \
+./scripts/start_public_caddy.sh
+```
+
+Then change router forwarding to:
+
+```text
+TCP 80  -> 192.168.50.206:8080
+TCP 443 -> 192.168.50.206:8443
+```
+
+External users still open:
+
+```text
+https://metabase.example.com
+```
+
 ## Metabase Security
 
 Before exposing publicly:
