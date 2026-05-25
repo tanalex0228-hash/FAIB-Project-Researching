@@ -306,6 +306,12 @@ http://100.72.157.21:3000
 
 Use it for filtering, charts, dashboards, and CSV export without writing SQL.
 
+For public internet access, deploy Metabase through Cloudflare Tunnel. See:
+
+```text
+docs/PUBLIC_DEPLOYMENT.md
+```
+
 Start it:
 
 ```bash
