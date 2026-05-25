@@ -358,3 +358,28 @@ df_wide = df.pivot(index="date", columns="series_id", values="value")
 ```
 
 This keeps ingestion simple while leaving transformations flexible for stationarity checks, lag construction, differencing, resampling, and model-specific preprocessing.
+
+For browser tables and modeling, create monthly research views:
+
+```bash
+cd ~/fred-macro-research-db
+chmod +x scripts/setup_research_views.sh
+sudo scripts/setup_research_views.sh
+```
+
+This creates:
+
+```text
+research.monthly_macro_long
+research.monthly_macro_wide
+```
+
+The wide view is convenient for Metabase tables and VAR/ML notebooks.
+
+Run a VAR example:
+
+```bash
+source .venv/bin/activate
+pip install -r requirements.txt
+DATABASE_URL='postgresql+psycopg2://member01:password@100.72.157.21:5432/fred_macro' python scripts/run_var_example.py
+```

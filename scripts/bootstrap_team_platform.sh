@@ -22,6 +22,7 @@ else
 fi
 
 scripts/setup_usage_monitoring.sh
+scripts/setup_research_views.sh
 
 user_specs=()
 {

@@ -3,3 +3,4 @@ pandas
 requests
 sqlalchemy
 python-dotenv
+statsmodels
