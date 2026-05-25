@@ -32,4 +32,9 @@ FRED_SERIES_IDS = [
     "M2SL",
     "MORTGAGE30US",
     "GDPC1",
+    "VIXCLS",
+    "UMCSENT",
+    "PAYEMS",
+    "WALCL",
+    "T10Y2Y",
 ]

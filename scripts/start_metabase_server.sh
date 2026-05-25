@@ -14,6 +14,7 @@ docker network connect "${NETWORK_NAME}" "${POSTGRES_CONTAINER}" >/dev/null 2>&1
 
 if docker ps -a --format '{{.Names}}' | grep -qx "${METABASE_CONTAINER}"; then
   docker start "${METABASE_CONTAINER}"
+  docker network connect "${NETWORK_NAME}" "${METABASE_CONTAINER}" >/dev/null 2>&1 || true
 else
   docker volume create "${VOLUME_NAME}" >/dev/null
   docker run -d \
@@ -25,5 +26,8 @@ else
     -e MB_DB_FILE=/metabase-data/metabase.db \
     "${METABASE_IMAGE}"
 fi
+
+docker network connect "${NETWORK_NAME}" "${POSTGRES_CONTAINER}" >/dev/null 2>&1 || true
+docker network connect "${NETWORK_NAME}" "${METABASE_CONTAINER}" >/dev/null 2>&1 || true
 
 docker ps --filter name="${METABASE_CONTAINER}"

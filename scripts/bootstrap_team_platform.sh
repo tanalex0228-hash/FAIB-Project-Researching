@@ -23,6 +23,11 @@ fi
 
 scripts/setup_usage_monitoring.sh
 scripts/setup_research_views.sh
+if [[ -x ".venv/bin/python" ]]; then
+  .venv/bin/python -m app.generate_features --full-refresh
+else
+  python3 -m app.generate_features --full-refresh
+fi
 
 user_specs=()
 {

@@ -33,7 +33,15 @@ docker exec "${CONTAINER_NAME}" \
 
 docker exec "${CONTAINER_NAME}" \
   psql -U "${POSTGRES_USER}" -d "${POSTGRES_DB}" -c \
+  "grant usage on schema research to ${READER_USER};"
+
+docker exec "${CONTAINER_NAME}" \
+  psql -U "${POSTGRES_USER}" -d "${POSTGRES_DB}" -c \
   "grant select on all tables in schema public to ${READER_USER};"
+
+docker exec "${CONTAINER_NAME}" \
+  psql -U "${POSTGRES_USER}" -d "${POSTGRES_DB}" -c \
+  "grant select on all tables in schema research to ${READER_USER};"
 
 docker exec "${CONTAINER_NAME}" \
   psql -U "${POSTGRES_USER}" -d "${POSTGRES_DB}" -c \

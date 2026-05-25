@@ -84,9 +84,66 @@ USREC
 M2SL
 MORTGAGE30US
 GDPC1
+VIXCLS
+UMCSENT
+PAYEMS
+WALCL
+T10Y2Y
 ```
 
 Repeated runs are safe. Existing `(series_id, date)` rows are updated through PostgreSQL upsert.
+
+## Feature Pipeline
+
+Generate macro research features from the monthly aligned dataset:
+
+```bash
+python -m app.generate_features --full-refresh
+```
+
+or:
+
+```bash
+python generate_features.py --full-refresh
+```
+
+Without `--full-refresh`, the pipeline performs an incremental update by recomputing from 12 months before the latest feature month and upserting the result.
+
+The pipeline writes to:
+
+```text
+macro_features
+```
+
+Feature columns:
+
+| Column | Formula |
+| --- | --- |
+| inflation_yoy | `cpiaucsl.pct_change(12) * 100` |
+| core_inflation_yoy | `cpilfesl.pct_change(12) * 100` |
+| spread_10y_2y | `dgs10 - dgs2` |
+| spread_10y_3m | `dgs10 - tb3ms` |
+| real_10y_rate | `dgs10 - inflation_yoy` |
+| real_fedfunds_rate | `fedfunds - inflation_yoy` |
+| industrial_production_yoy | `indpro.pct_change(12) * 100` |
+| recession_regime | `usrec`, preserved as 0/1 |
+
+Missing value policy:
+
+```text
+No forward fill for inflation.
+No interpolation for recession indicators.
+Missing values remain NULL.
+Quarterly GDP is forward-filled only within the same quarter in the monthly aligned view.
+```
+
+Metabase-friendly research views:
+
+```text
+research.monthly_macro_long
+research.monthly_macro_wide
+research.monthly_macro_features
+```
 
 ## Ubuntu Server Deployment
 

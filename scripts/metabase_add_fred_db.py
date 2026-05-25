@@ -1,5 +1,6 @@
 import os
 import sys
+from typing import NoReturn
 
 import requests
 
@@ -21,6 +22,13 @@ def require_env(name: str, value: str | None) -> str:
         print(f"Missing environment variable: {name}", file=sys.stderr)
         sys.exit(1)
     return value
+
+
+def raise_with_body(response: requests.Response) -> NoReturn:
+    print(f"Metabase API error: HTTP {response.status_code}", file=sys.stderr)
+    print(response.text, file=sys.stderr)
+    response.raise_for_status()
+    raise RuntimeError("unreachable")
 
 
 def main() -> None:
@@ -69,7 +77,8 @@ def main() -> None:
         headers=headers,
         timeout=30,
     )
-    create_response.raise_for_status()
+    if not create_response.ok:
+        raise_with_body(create_response)
     database = create_response.json()
     database_id = database["id"]
 

@@ -50,7 +50,15 @@ for pair in "$@"; do
 
   docker exec "${CONTAINER_NAME}" \
     psql -U "${POSTGRES_USER}" -d "${POSTGRES_DB}" -c \
-    "grant select on fred_series, macro_data to ${username};"
+    "grant usage on schema research to ${username};"
+
+  docker exec "${CONTAINER_NAME}" \
+    psql -U "${POSTGRES_USER}" -d "${POSTGRES_DB}" -c \
+    "grant select on fred_series, macro_data, macro_features to ${username};"
+
+  docker exec "${CONTAINER_NAME}" \
+    psql -U "${POSTGRES_USER}" -d "${POSTGRES_DB}" -c \
+    "grant select on all tables in schema research to ${username};"
 
   docker exec "${CONTAINER_NAME}" \
     psql -U "${POSTGRES_USER}" -d "${POSTGRES_DB}" -c \

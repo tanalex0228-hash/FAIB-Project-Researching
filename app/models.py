@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Date, DateTime, Float, ForeignKey, Integer, String, UniqueConstraint, func
+from sqlalchemy import Column, Date, DateTime, Float, ForeignKey, Integer, Numeric, String, UniqueConstraint, func
 from sqlalchemy.orm import relationship
 
 from app.db import Base
@@ -31,3 +31,19 @@ class MacroData(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
     series = relationship("FredSeries", back_populates="observations")
+
+
+class MacroFeatures(Base):
+    __tablename__ = "macro_features"
+
+    month = Column(Date, primary_key=True)
+    inflation_yoy = Column(Numeric)
+    core_inflation_yoy = Column(Numeric)
+    spread_10y_2y = Column(Numeric)
+    spread_10y_3m = Column(Numeric)
+    real_10y_rate = Column(Numeric)
+    real_fedfunds_rate = Column(Numeric)
+    industrial_production_yoy = Column(Numeric)
+    recession_regime = Column(Integer)
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
