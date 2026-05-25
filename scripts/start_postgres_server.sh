@@ -30,4 +30,20 @@ else
     -c log_line_prefix='%m [%p] user=%u db=%d app=%a client=%h '
 fi
 
+echo "Waiting for PostgreSQL to accept connections..."
+for attempt in $(seq 1 60); do
+  if docker exec "${CONTAINER_NAME}" pg_isready -U "${POSTGRES_USER}" -d "${POSTGRES_DB}" >/dev/null 2>&1; then
+    echo "PostgreSQL is ready."
+    break
+  fi
+
+  if [[ "${attempt}" == "60" ]]; then
+    echo "PostgreSQL did not become ready in time. Recent logs:"
+    docker logs --tail 80 "${CONTAINER_NAME}"
+    exit 1
+  fi
+
+  sleep 2
+done
+
 docker ps --filter name="${CONTAINER_NAME}"
