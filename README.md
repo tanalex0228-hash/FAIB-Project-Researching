@@ -312,6 +312,12 @@ For public internet access, deploy Metabase through Cloudflare Tunnel. See:
 docs/PUBLIC_DEPLOYMENT.md
 ```
 
+For direct router port-forwarding deployment, see:
+
+```text
+docs/ROUTER_PUBLIC_DEPLOYMENT.md
+```
+
 Start it:
 
 ```bash
