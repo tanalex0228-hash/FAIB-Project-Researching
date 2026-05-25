@@ -1,0 +1,22 @@
+name: Data request
+description: Request a new macroeconomic series or data transformation.
+title: "[Data] "
+labels: ["data"]
+body:
+  - type: textarea
+    id: request
+    attributes:
+      label: Data request
+      description: What series, transformation, or dataset do you need?
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Source
+      description: FRED series ID, URL, or data source.
+  - type: textarea
+    id: research_use
+    attributes:
+      label: Research use
+      description: How will this be used in modeling or analysis?

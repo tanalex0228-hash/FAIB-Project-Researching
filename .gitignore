@@ -1,0 +1,7 @@
+.venv/
+.pycache/
+__pycache__/
+.DS_Store
+*.backup
+.env
+team_credentials.local
