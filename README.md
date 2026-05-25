@@ -268,6 +268,16 @@ Username: macro_reader or a read-only member account
 Password: the account password
 ```
 
+You can also add the database through the Metabase API:
+
+```bash
+cd ~/fred-macro-research-db
+source .venv/bin/activate
+METABASE_EMAIL='your_metabase_admin_email' \
+METABASE_PASSWORD='your_metabase_admin_password' \
+python scripts/metabase_add_fred_db.py
+```
+
 ### pgAdmin
 
 pgAdmin is best for the server owner/admin:
