@@ -2,13 +2,16 @@ import os
 
 import numpy as np
 import pandas as pd
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from statsmodels.tsa.api import VAR
 
 
+load_dotenv()
+
 DATABASE_URL = os.getenv(
     "DATABASE_URL",
-    "postgresql+psycopg2://member01:password@100.72.157.21:5432/fred_macro",
+    "postgresql+psycopg2://postgres:postgres@localhost:5432/fred_macro",
 )
 
 SERIES = ["dgs10", "dgs2", "fedfunds", "cpiaucsl", "unrate", "indpro"]
