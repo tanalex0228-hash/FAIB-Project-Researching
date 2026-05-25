@@ -153,6 +153,34 @@ If a teammate cannot use Tailscale, they can export CSV from Metabase:
 research.monthly_macro_features
 ```
 
+## Public IP Without Domain
+
+If you do not own a domain, you can expose Metabase over plain HTTP by forwarding an external port to Metabase.
+
+Server:
+
+```bash
+cd ~/fred-macro-research-db
+chmod +x scripts/*.sh
+
+sudo ./scripts/start_postgres_server.sh
+sudo ./scripts/start_metabase_public_ip.sh
+```
+
+Router forwarding:
+
+```text
+TCP 8080 -> 192.168.50.206:3000
+```
+
+External users open:
+
+```text
+http://your-public-ip:8080
+```
+
+This is not encrypted. Use it only as a temporary setup, or put the service behind Tailscale, Cloudflare Tunnel, or a real domain with HTTPS later.
+
 ## Quick Checks
 
 On the server:
